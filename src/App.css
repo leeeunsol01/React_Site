@@ -1,0 +1,19 @@
+*{margin: 0; padding: 0;}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.App{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.scroll_container{
+  height: 100vh;  
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
