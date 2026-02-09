@@ -9,7 +9,7 @@ import store from './component/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Provider store={store}>
         <React.StrictMode>
           <App />
