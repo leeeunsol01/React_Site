@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from './store.js';
 import styled from 'styled-components';
 
 import data from './data';
+import products from './data';
 
 const BestProductFlex = styled.div`
     position: relative;
@@ -116,25 +117,36 @@ const CartMoveBtn = styled(Link)`
 
 
 export default function Best() {
-    const bestTop = [...data]
-    .sort((a, b) => {
-        return(b.defaultScore + b.cartCount) - (a.defaultScore + a.cartCount);
-    }).slice(0, 6);
-
-    const [bests] = useState(bestTop);
+    const cart = useSelector((state) => state.cart);
+    const [allProducts, setAllProducts] = useState([...data]);
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    
+    useEffect(() => {
+        const updataList = [...data].map(product => {
+            const cartItem = cart.find(item => item.id === product.id);
+            const liveCount = cartItem ? cartItem.count : 0;
+            return{
+                ...product,
+                totalScore: product.defaultScore + (liveCount * product.cartCount)
+            };
+        });
+        updataList.sort((a,b) => b.totalScore - a.totalScore);
+        setAllProducts(updataList);
+    },[cart]);
+    
     const handleAddItem = (item) => {
         dispatch(addItem(item));
         setIsModalOpen(true);
     }
+
+    const currentBestTop6 = allProducts.slice(0, 6);
   return (
       <div style={{width: '1200px', margin: '200px auto 0'}}>
         <h3>베스트</h3>
         
         <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap'}}>
-            {bests.map((best, index) => (
+            {currentBestTop6.map((best, index) => (
                 <BestProductFlex key={best.id}>
                     <BestProduct to={`/detail/${best.id}`} style={{width: '590px'}}>
                         {index < 3 &&(
