@@ -133,7 +133,7 @@ export default function Custom() {
               <Styled.GraphFelx>
                 <p style={{width:'80px', fontWeight: '500'}}>{spec.label}({spec.key})</p>
                 <Styled.GraphBar>
-                  <Styled.BarFill $percent={(totals[spec.key] / Recommended.kcal) * 100}/>
+                  <Styled.BarFill $percent={(totals[spec.key] / Recommended.[spec.key]) * 100}/>
                 </Styled.GraphBar>
                 <Styled.TotalBox>
                   <p>Total {spec.label} : <span style={{fontSize: '18px'}}>{totals[spec.key]}</span>{spec.unit}</p>
