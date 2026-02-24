@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# 🍱 채선당 도시락&샐러드
+채선당 도시락&샐러드 공식 사이트가 브랜드 소개 중심으로 구성되어 있어, 사용자들이 직접 상품을 구매할 수 있는 판매 사이트 형태로 리뉴얼했습니다.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🛠️ 기술스택
+- React
+- Redux Toolkit
+- React Router
+- Styled-components
 
-## Available Scripts
+## 📌 주요기능
+- 장바구니 상태 관리 및 수량 실시간 반영
+- 체크된 장바구니 데이터를 기반으로 그래프 값 동적 업데이트 구현
+- 검색어 기반 상품 필터링 기능 구현
+- 도시락 커스터마이징 기능 (선택에 따른 동적 이미지 변경)
 
-In the project directory, you can run:
+## 📦 컴포넌트 구조
+chaesundang/
+  ├── src/
+  │ ├── component/            # 재사용 가능한 컴포넌트
+  │   ├── Best.js             # Best 페이지
+  │   ├── Footer.js           # Footer 기본 틀
+  │   ├── Header.js           # 공용 Header
+  │   ├── BrandPage.js        # 브랜드소개 페이지
+  │   ├── CartPage.js         # 장바구니 페이지
+  │   ├── Custom.js           # 나만의 도시락 만들기 콘텐츠
+  │   ├── CustomStyled.js     # 나만의 도시락 만들기 styled-components
+  │   ├── DetailPage.js       # 상세 페이지
+  │   ├── FindPage.js         # 매장 찾기 페이지
+  │   ├── Loign.js            # 로그인 페이지
+  │   ├── MainPage.js         # 메인 페이지
+  │   ├── MainPageStyled.js   # 메인 페이지 styled-components
+  │   ├── NoticeDetail.js     # 공지사항 상세 페이지
+  │   ├── NoticePage.js       # 공지사항 페이지
+  │   ├── ProductBox.js       # 상품 기본 틀
+  │   ├── SignUp.js           # 회원가입 페이지
+  │   ├── store.js            # 장바구니 상태관리
+  │   ├── SubPage.js          # 서브 페이지
+  │   └── swiper.css          # swiper 스타일
+  └── data/ 
+      ├── data.js             # 모든 상품의 데이터
+      ├── customData.js       # 나만의 도시락 만들기 데이터
+      ├── findData.js         # 매장 찾기 데이터
+      ├── noticeData.js       # 공지사항 데이터
+      └── reviewData.js       # 리뷰 데이터
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🧠 설계 및 구현 과정
+### 1. 장바구니 상태 관리 및 수량 실시간 반영
+- **cart slice**: 상품 추가/삭제, 수량 조절 기능
+- 전역 상태를 기반으로 Header에 총 상품 수량을 실시간 반영
+#### store.js
+```javascript
+const cart = createSlice({
+    name: 'cart',
+    initialState: [],
+    reducers: {
+        addItem(state, action){ ... },
+        deleteItem(state, action){ ... },
+        ...
+    }
+});
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### Header.js
+```jsx
+const state = useSelector((state) => state);
+const totalCount = cart.reduce((total, item) => total + item.count, 0);
+```
