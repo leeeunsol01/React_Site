@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const CustomBox = styled.div`
@@ -15,6 +16,15 @@ export const CustomTitle = styled.div`
   display: flex;
   width: 650px;
   opacity: ${props => props.isMode ? 0 : 1};
+  transition: all 0.5s ease;
+`;
+
+export const CustomTitle2 = styled.div`
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: ${props => props.isMode ? 1 : 0};
   transition: all 0.5s ease;
 `;
 
@@ -214,8 +224,72 @@ export const ResetBtn = styled.button`
   border-radius: 5px;
   position: absolute;
   bottom: 20px;
-  left: 50%;
+  left: 45%;
   transform: translateX(-50%);
   transition: all 0.5s ease;
   cursor: pointer;
+`;
+
+export const CartBtn = styled.button`
+  background-color: #243B55;
+  border: none;
+  color: white;
+  font-weight: 500;
+  padding: 15px 20px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 20px;
+  left: 55%;
+  transform: translateX(-50%);
+  transition: all 0.5s ease;
+  cursor: pointer;
+`;
+
+export const CartModal = styled.div`
+  width: 670px;
+  height: 280px;
+  border: 1px solid #8B8273;
+  border-radius: 5px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+`;
+
+export const ContinueBtn = styled.button`
+  width: 285px;
+  height: 60px;
+  background-color: #F4EBD0;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover{
+    box-shadow: 4px 4px 12px 1px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+export const CartMoveBtn = styled(Link)`
+  display: block;
+  width: 285px;
+  height: 60px;
+  background-color: #243B55;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  line-height: 60px;
+  &:hover{
+    box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.3);
+  }
 `;

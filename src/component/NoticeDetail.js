@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import noticeData from './noticeData';
+import noticeData from '../data/noticeData';
 
 const BreadCrumb = styled(Link)`
     text-decoration: none;

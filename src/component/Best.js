@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from './store.js';
 import styled from 'styled-components';
 
-import data from './data';
-import products from './data';
+import data from '../data/data.js';
+import products from '../data/data.js';
 
 const BestProductFlex = styled.div`
     position: relative;
@@ -34,7 +34,7 @@ const BestProduct = styled(Link)`
         line-height: 30px;
         top: 10px;
         left: 10px;
-        z-index: 1000;
+        z-index: 100;
     }
     &:hover .productImg{
         transform: scale(1.1);
@@ -140,10 +140,21 @@ export default function Best() {
         setIsModalOpen(true);
     }
 
+    useEffect(() => {
+        if (isModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isModalOpen]);
+
     const currentBestTop6 = allProducts.slice(0, 6);
   return (
       <div style={{width: '1200px', margin: '200px auto 0'}}>
-        <h3>베스트</h3>
+        <h3 style={{fontSize: '28px'}}>베스트</h3>
         
         <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap'}}>
             {currentBestTop6.map((best, index) => (

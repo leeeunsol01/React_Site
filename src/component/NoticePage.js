@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import notice from './noticeData';
+import notice from '../data/noticeData';
 
 const BreadCrumb = styled(Link)`
     text-decoration: none;

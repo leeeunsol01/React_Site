@@ -1,13 +1,12 @@
 import React from 'react'
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addItem } from './store.js';
 import styled from 'styled-components';
 
-import data from './data';
-import review from './reviewData';
-import { useEffect } from 'react';
+import data from '../data/data.js';
+import review from '../data/reviewData.js';
 
 const BreadCrumb = styled(Link)`
     text-decoration: none;
@@ -201,7 +200,6 @@ export default function DetailPage() {
     const [visibleReview, setVisibleReview] = useState(4);
     const [visibleQna, setVisibleQna] = useState(4);
     const [modalType, setModalType] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const nutritions = [
         {label : '열량', key: 'kcal', unit: 'kcal'},
@@ -224,7 +222,11 @@ export default function DetailPage() {
 
     const handleAddItem = (item) => {
         dispatch(addItem(item));
-        setIsModalOpen(true);
+        setModalType('cart');
+    }
+
+    const handleBuyNow = () => {
+        setModalType('buy');
     }
 
   return (
@@ -264,7 +266,7 @@ export default function DetailPage() {
             </div>
             <div>
                 <CartBtn onClick={() => handleAddItem({id: detail.id, img: detail.productImg, name:detail.name, subtitle: detail.subTitle, price: detail.price, count: count})}>장바구니 담기</CartBtn>
-                <BuyBtn>바로 구매</BuyBtn>
+                <BuyBtn onClick={handleBuyNow}>바로 구매</BuyBtn>
             </div>
         </div>
       </div>
@@ -324,21 +326,47 @@ export default function DetailPage() {
             <MoreBtn onClick={() => setVisibleQna(visibleQna + 4)}>더보기</MoreBtn>
         )}
       </div>
-      {isModalOpen && (
+      {(modalType === 'cart' || modalType === 'buy' || modalType === 'complete') && (
             <div style={{width:'100%', height:'100%', position: 'fixed', top: '0', left: '0', backgroundColor: 'rgba(0, 0, 0, 0.3)', zIndex: '1000'}}>
                 <CartModal>
-                <div style={{fontSize:'20px'}}>
-                    <p>장바구니에 담았습니다.</p>
-                    <p>바로 확인 하시겠습니까?</p>
-                </div>
-                <div style={{display: 'flex', marginTop: '50px'}}>
-                    <ContinueBtn onClick={() => setIsModalOpen(false)}>쇼핑 계속하기</ContinueBtn>
-                    <CartMoveBtn to={'/cart'}>장바구니로 이동</CartMoveBtn>
-                </div>
+                    <div style={{fontSize:'20px'}}>
+                    {modalType === 'cart' ? (
+                        <>
+                            <p>장바구니에 담았습니다.</p>
+                            <p>바로 확인 하시겠습니까?</p>
+                        </>
+                    ) : modalType === 'buy' ? (
+                        <>
+                            <p>선택하신 {count}개의 상품을 결제하시겠습니까?</p>
+                            <p>총 상품 금액: {(detail.price * count).toLocaleString()}원</p>
+                        </>
+                    ) : (
+                        <p>결제가 완료되었습니다.</p>
+                    )}
+                    </div>
+                    <div style={{display: 'flex', marginTop: '50px'}}>
+                        {modalType === 'cart' ? (
+                            <>
+                                <ContinueBtn onClick={() => setModalType(null)}>쇼핑 계속하기</ContinueBtn>
+                                <CartMoveBtn to={'/cart'}>장바구니로 이동</CartMoveBtn>
+                            </>
+                        ) :modalType === 'buy' ? (
+                            <>
+                                <ContinueBtn onClick={() => setModalType(null)}>취소</ContinueBtn>
+                                <ContinueBtn onClick={() => setModalType('complete')} style={{ backgroundColor: '#243B55', color: 'white' }}>
+                                    결제하기
+                                </ContinueBtn>
+                            </>
+                        ) : (
+                            <ContinueBtn onClick={() => setModalType(null)} style={{ backgroundColor: '#243B55', color: 'white' }}>
+                                확인
+                            </ContinueBtn>
+                        )}
+                    </div>
                 </CartModal>
             </div>
         )}
-        {modalType && (
+        {(modalType === '리뷰' || modalType === '문의') && (
             <div style={{width: '100%', height: '100%', position: 'fixed', top: '0', left: '0', backgroundColor: 'rgba(0, 0, 0, 0.3)'}}>
                 <WriteModal onClick={(e) => e.stopPropagation()}>
                     <h3>{modalType} 제목</h3>

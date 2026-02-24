@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addItem } from './store.js';
 import styled from 'styled-components';
 
-import data from './data';
+import data from '../data/data.js';
 
 const BreadCrumb = styled(Link)`
     text-decoration: none;
@@ -185,6 +185,17 @@ export default function SubPage() {
 
     return() => observer.disconnect();
     },[category]);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isModalOpen]);
 
   return (
     <div style={{width: '1200px', margin:'0 auto 200px'}}>

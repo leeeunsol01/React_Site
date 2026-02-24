@@ -97,9 +97,40 @@ const BuyBtn = styled.button`
     cursor: pointer;
 `;
 
+const CartModal = styled.div`
+  width: 670px;
+  height: 280px;
+  border: 1px solid #8B8273;
+  border-radius: 5px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const ContinueBtn = styled.button`
+  width: 285px;
+  height: 60px;
+  background-color: #F4EBD0;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover{
+    box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.3);
+  }
+`;
+
 export default function CartPage() {
     const state = useSelector((state) => state);
     const dispatch = useDispatch();
+    const [modalType, setModalType] = useState(null);
 
     const [checkedList, setCheckedList] = useState(state.cart.map(item => item.id));
     useEffect(() => {
@@ -120,8 +151,24 @@ export default function CartPage() {
             setCheckedList(prev => prev.filter(el => el !== id));
         }
     }
+
+    useEffect(() => {
+        document.body.style.overflow = modalType? 'hidden' : 'unset';
+    }, [modalType]);
+
     const checkedPrice = state.cart.filter(item => checkedList.includes(item.id))
         .reduce((total, item) => total + (item.price * item.count), 0);
+
+    const totalCount = state.cart.filter(item => checkedList.includes(item.id))
+        .reduce((total, item) => total + item.count, 0);
+
+    const handleBuyClick = () => {
+        if (checkedList.length === 0) {
+            setModalType('empty');
+        } else {
+            setModalType('buy');
+        }
+    };
 
 return (
     <div style={{width: '1200px', margin: '0 auto'}}>
@@ -170,7 +217,39 @@ return (
             </div>
             <p style={{fontSize: '14px'}}>결제 예상금액<span style={{fontSize:'32px', fontWeight: '600', color: '#FF6B00', marginLeft: '20px'}}>{checkedPrice.toLocaleString()}</span><span style={{fontSize:'20px', color: '#FF6B00'}}>원</span></p>
         </div>
-        <BuyBtn>구매하기</BuyBtn>
+        <BuyBtn onClick={handleBuyClick}>구매하기</BuyBtn>
+        {(modalType === 'empty' || modalType === 'buy' || modalType === 'complete') && (
+            <div style={{width:'100%', height:'100%', position: 'fixed', top: '0', left: '0', backgroundColor: 'rgba(0, 0, 0, 0.3)', zIndex: '1000'}}>
+                <CartModal>
+                <div style={{fontSize:'20px'}}>
+                    {modalType === 'empty' ? (
+                        <>
+                            <p>상품을 선택해주세요.</p>
+                        </>
+                    ) : modalType === 'buy' ? (
+                        <>
+                            <p>선택하신 {totalCount}개의 상품을 결제하시겠습니까?</p>
+                            <p>총 상품 금액: {checkedPrice.toLocaleString()}원</p>
+                        </>
+                    ) : (
+                        <p>결제가 완료되었습니다.</p>
+                    )}
+                </div>
+                <div style={{display: 'flex', marginTop: '50px'}}>
+                    {modalType === 'empty' ? (
+                        <ContinueBtn onClick={() => setModalType(null)}>확인</ContinueBtn>
+                    ) : modalType === 'buy' ? (
+                        <>
+                            <ContinueBtn onClick={() => setModalType(null)}>취소</ContinueBtn>
+                            <ContinueBtn onClick={() => setModalType('complete')} style={{ backgroundColor: '#243B55', color: 'white' }}>결제하기</ContinueBtn>
+                        </>
+                    ) : (
+                        <ContinueBtn onClick={() => setModalType(null)} style={{ backgroundColor: '#243B55', color: 'white' }}>확인</ContinueBtn>
+                    )}
+                </div>
+                </CartModal>
+            </div>
+        )}
     </div>
     )
 }

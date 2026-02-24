@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
-
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import data from './data';
+import data from '../data/data';
 
 const HeaderBox = styled.header`
     background-color: white;
@@ -83,6 +83,7 @@ const StyledLink = styled(Link)`
     color: black;
     margin-left: 20px;
     cursor: pointer;
+    position: relative;
     &:hover{
         font-weight: 600;
         color: #FF6B00;
@@ -140,11 +141,28 @@ const SearchLink = styled(Link)`
     color: black;
 `;
 
+const CartBadge = styled.div`
+    position: absolute;
+    top: -10px;
+    right: -15px;
+    width: 20px;
+    height: 20px;
+    background-color: #FF6B00;
+    border-radius: 50%;
+    line-height: 20px;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    display: ${props => props.count === 0 ? 'none' : 'block'};
+`;
+
 
 export default function Header() {
     const [search, setSearch] = useState('');
     const [isSearchOpen, setIsSearchOpne] = useState(false);
     const searchRef = useRef(null);
+    const cart = useSelector((state) => state.cart);
+    const totalCount = cart.reduce((total, item) => total + item.count, 0);
 
     const closeSearch = () => {
         setIsSearchOpne(false);
@@ -230,7 +248,10 @@ export default function Header() {
                 </SearchBox>
                 <StyledLink to='/login'>로그인</StyledLink>
                 <StyledLink to='/sign'>회원가입</StyledLink>
-                <StyledLink to='/cart'>장바구니</StyledLink>
+                <StyledLink to='/cart'>
+                    장바구니
+                    {totalCount > 0 && <CartBadge count={totalCount}>{totalCount}</CartBadge>}
+                </StyledLink>
             </HeaderRight>
         </HeaderWrap>
     </HeaderBox>

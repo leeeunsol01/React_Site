@@ -3,7 +3,7 @@
     import { Link } from 'react-router-dom';
     import styled from 'styled-components';
 
-    import storeData from './findData';
+    import storeData from '../data/findData';
 
     const BreadCrumb = styled(Link)`
         text-decoration: none;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Routes, Route, Link} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -9,8 +9,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-import data from './data.js';
-import reviewData from './reviewData.js';
+import data from '../data/data.js';
+import reviewData from '../data/reviewData.js';
 import './swiper.css';
 import Custom from './Custom.js';
 import Best from './Best.js';
@@ -37,6 +37,17 @@ export default function MainPage() {
   for(let i=0; i< reviews.length; i += 4){
     reviewGroup.push(reviews.slice(i, i + 4));
   }
+
+  useEffect(() => {
+    if (isModalOpen) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'unset';
+    }
+    return () => {
+        document.body.style.overflow = 'unset';
+    };
+  }, [isModalOpen]);
   return (
     <>
       <Styled.StyleSwiper
@@ -72,7 +83,7 @@ export default function MainPage() {
       {/* main_visual */}
 
       <Styled.MdProduct>
-          <h3>MD추천</h3>
+          <h3 style={{fontSize: '28px'}}>MD추천</h3>
         <Styled.MdProductWrap>
           {mds.length > 0 &&(
             <Styled.MdBigProduct>
@@ -126,7 +137,7 @@ export default function MainPage() {
       <Custom />
       <Best />
       <div style={{width: '1200px', margin: '200px auto 0', position:'relative'}}>
-        <h3 style={{fontSize: '20px', marginBottom: '20px'}}>사용자 후기</h3>
+        <h3 style={{fontSize: '28px', marginBottom: '20px'}}>사용자 후기</h3>
         <div className='review_prev'>
           <img src={process.env.PUBLIC_URL + '/images/prev_btn.png'} alt="" />
         </div>
@@ -156,11 +167,13 @@ export default function MainPage() {
             {group.map(review =>(
               <Styled.ReviewBox key={review.id}>
                 <img src={review.reviewImg} style={{width: '285px', height: '285px', backgroundColor: '#F4EBD0', borderRadius: '5px'}}/>
-                {[1, 2, 3, 4].map(star => (
-                  <img key={star} src={process.env.PUBLIC_URL + "/images/star.png"} style={{width: '10px', height: '10px'}} />
-                ))}
-                <p style={{fontSize: '14px', margin:'10px 0 20px'}}>{review.reviewTxt}</p>
-                <p style={{color: '#8B8273', fontWeight: '300', borderTop: '1px solid #8B8273', padding: '5px 0'}}>{review.productName}</p>
+                <div style={{padding: '0 5px'}}>
+                  {[1, 2, 3, 4].map(star => (
+                    <img key={star} src={process.env.PUBLIC_URL + "/images/star.png"} style={{width: '10px', height: '10px'}} />
+                  ))}
+                </div>
+                <p style={{fontSize: '14px', margin:'10px 0 20px', padding: '0 5px'}}>{review.reviewTxt}</p>
+                <p style={{color: '#8B8273', fontWeight: '300', borderTop: '1px solid #8B8273', padding: '5px'}}>{review.productName}</p>
               </Styled.ReviewBox>
             ))}
           </Styled.ReviewSlide>
