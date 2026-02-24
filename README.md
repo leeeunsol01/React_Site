@@ -103,8 +103,8 @@ const checkedPrice = state.cart.filter(item => checkedList.includes(item.id))
 ```
 ### 3. 데이터 분리
 - 상품, 커스터마이징, 매장, 공지사항 데이터를 파일별로 분리하여 관리
-- data.js에 defaultScore와 cartCount 값을 설계하여 장바구니 추가 수에 따라 Best 영역 랭킹이 동적으로 변경되도록 구현
-- customData.js의 price 속성을 기반으로 선택된 상품의 총 금액을 계산하도록 구조 설계
+- **data.js**: defaultScore와 cartCount 값을 설계하여 장바구니 추가 수에 따라 Best 영역 랭킹이 동적으로 변경되도록 구현
+- **customData.js**: price 속성을 기반으로 선택된 상품의 총 금액을 계산하도록 구조 설계
 
 #### data.js
 ```javascript
