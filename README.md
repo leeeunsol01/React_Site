@@ -45,7 +45,7 @@ chaesundang/
       └── reviewData.js       # 리뷰 데이터
 </pre>
 
-## 🧠 설계 의도 및 주요 기능 구현
+## 🧠 설계 및 구현 과정
 ### 1. 장바구니 상태 관리 및 수량 실시간 반영
 - 여러 컴포넌트에서 공통으로 사용하는 장바구니 특성상 Redux Toolkit을 도입하여 전역 상태로 관리
 - cart slice로 액션과 reducer를 구조화하여 상태 변경 책임을 명확히 분리
@@ -104,6 +104,7 @@ const checkedPrice = state.cart.filter(item => checkedList.includes(item.id))
 // 계산된 총 금액을 기준 금액(40,000원)과 비교해 퍼센트로 변환
 <BarFill $percent={(checkedPrice / 40000) * 100}/>
 ```
+
 ### 3. 데이터 분리
 - 기능별(상품, 커스터마이징, 매장, 공지사항)로 데이터를 파일 단위로 분리하여 관심사를 구분하고 유지보수성을 고려
 - **data.js**: defaultScore와 cartCount 값을 설계하여 장바구니 추가 수에 따라 Best 영역 랭킹이 동적으로 변경되도록 구조화
@@ -174,7 +175,54 @@ const custom = {
 };
 ```
 
-#### 
+#### 🔧 트러블슈팅: Best 랭킹 동적 변경
+#### 개선 전
+> 장바구니 count 값을 기반으로 Best 랭킹을 계산했으나, 페이지 전환 시 데이터가 초기화되어 랭킹이 유지되지 않는 문제가 발생
+```javascript
+const products = [
+  {
+        id: 6,
+        category: '스페셜 도시락',
+        name: '고추장제육 도시락',
+        subTitle: '화끈한 불향과 매콤한 유혹, 지친 하루에 에너지를 더하다',
+        price: 10600,
+        productImg: process.env.PUBLIC_URL + '/images/SpicyPorkBox.png',
+        detailImg: process.env.PUBLIC_URL + '/images/SpicyPorkBox_Detail.png',
+        isMD: false,   
+        nutrition: {
+            kcal: 900,
+            carb: 95,
+            protein: 33,
+            fat: 38,
+        }
+    }
+];
+```
+
+#### 개선 후
+> 랭킹 기준이 되는 기본 점수(defaultScore)와 장바구니 반영 값(cartCount)을 데이터에 명시적으로 추가하여 UI 계산 기준을 구조적으로 분리
+```javascript
+const products = [
+  {
+        id: 6,
+        category: '스페셜 도시락',
+        name: '고추장제육 도시락',
+        subTitle: '화끈한 불향과 매콤한 유혹, 지친 하루에 에너지를 더하다',
+        price: 10600,
+        productImg: process.env.PUBLIC_URL + '/images/SpicyPorkBox.png',
+        detailImg: process.env.PUBLIC_URL + '/images/SpicyPorkBox_Detail.png',
+        isMD: false,
+        defaultScore: 800,
+        cartCount: 150,       
+        nutrition: {
+            kcal: 900,
+            carb: 95,
+            protein: 33,
+            fat: 38,
+        }
+    }
+];
+```
 
 ### 4. 검색어 기반 상품 필터링 기능 구현
 - 검색어를 상태로 관리하여 입력값을 기준으로 UI가 즉시 반응하도록 설계
@@ -245,3 +293,26 @@ const customItem = {
     .join(' + ')
 };
 dispatch(addItem(customItem));
+```
+
+#### 🔧 트러블슈팅: 나만의 도시락 완성 후 활용
+#### 개선 전
+> 초기화 버튼만 존재하여, 커스터마이징 완료 후 행동 흐름이 단절, 결과물이 저장되지 않아 사용자 경험이 미완성된 느낌
+<div>
+  <img src="img/CustomBefore.png" style="width: 800px" />
+</div>
+
+#### 개선 후
+> 선택된 메뉴를 하나의 커스텀 상품 객체로 생성하여 장바구니에 추가하도록 개선, 커스터마이징 → 구매 흐름으로 자연스럽게 연결
+```javascript
+const customItem = {
+  id: Date.now(),
+  name: '나만의 커스텀 도시락',
+  price: totals.price,
+  subtitle: Object.values(selection)
+    .filter(Boolean)
+    .map(item => item.name)
+    .join(' + ')
+};
+dispatch(addItem(customItem));
+```
