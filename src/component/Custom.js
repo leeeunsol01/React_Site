@@ -96,22 +96,22 @@ export default function Custom() {
   ]
 
   const totals = useMemo(() =>{
-    let resualtTotal = { kcal: 0, carb: 0, protein: 0, fat: 0, price: 0 };
+    let resultTotal = { kcal: 0, carb: 0, protein: 0, fat: 0, price: 0 };
     
     Object.values(selection).forEach(path => {
       if(path){
-        resualtTotal.price += path.price;
+        resultTotal.price += path.price;
       }
 
       if(path && path.nutrition){
-        resualtTotal.kcal += path.nutrition.kcal;
-        resualtTotal.carb += path.nutrition.carb;
-        resualtTotal.protein += path.nutrition.protein;
-        resualtTotal.fat += path.nutrition.fat;
+        resultTotal.kcal += path.nutrition.kcal;
+        resultTotal.carb += path.nutrition.carb;
+        resultTotal.protein += path.nutrition.protein;
+        resultTotal.fat += path.nutrition.fat;
 
       }
     });
-    return resualtTotal;
+    return resultTotal;
   },[selection]);
 
   useEffect(() => {
