@@ -316,3 +316,6 @@ const customItem = {
 };
 dispatch(addItem(customItem));
 ```
+
+### ✨ 프로젝트를 통해
+React를 사용하여 데이터를 배열로 관리하고 map을 활용해 동적으로 UI를 렌더링하며 컴포넌트 기반 설계 방식에 대해 이해했습니다.
