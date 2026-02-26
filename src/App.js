@@ -2,6 +2,8 @@
 import './App.css';
 import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import styled from 'styled-components';
 
 import Header from './component/Header';
@@ -21,29 +23,32 @@ const Content = styled.div`
   flex: 1;
 `;
 
-const QuickgoTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
-}
-
-const QuickgoBottom = () => {
-  window.scrollTo({
-    top: document.documentElement.scrollHeight,
-    behavior: 'smooth',
-  });
-}
-
 function ScrollTo(){
   const {pathname} = useLocation();
 
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
-    return null;
+  return null;
 }
+
+const QuickgoTop = () => {
+  gsap.to(window, {
+    duration: 1.2,
+    scrollTo: 0,
+    ease: 'power2.out'
+  });
+};
+
+const QuickgoBottom = () => {
+  gsap.to(window, {
+    duration: 1.2,
+    scrollTo: document.body.scrollHeight,
+    ease: 'power2.out'
+  });
+};
+
 
 function QuickMenu(){
   const QuickTop = styled.button`
@@ -53,6 +58,7 @@ function QuickMenu(){
     margin-bottom: 20px;
     border: none;
     background-color: transparent;
+    transition: all 0.3s ease;
     &:hover{
       filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
     }
@@ -65,6 +71,7 @@ function QuickMenu(){
     margin-bottom: 20px;
     border: none;
     background-color: transparent;
+    transition: all 0.3s ease;
     &:hover{
       filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
     }
